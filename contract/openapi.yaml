@@ -1,18 +1,25 @@
 openapi: 3.0.3
 info:
   title: API de Cuentas Bancarias
-  version: "1.0.0" # LAB: sustituir por 1.0.0
-  description: API educativa para consultar cuentas bancarias ficticias del laboratorio guiado.
+  version: "1.0.0"
+  description: API educativa para consultar y simular la creación de cuentas bancarias ficticias.
   contact:
     name: Equipo API
     email: api@example.org
+
 servers:
   - url: https://example.execute-api.us-east-1.amazonaws.com/test
+
+tags:
+  - name: Cuentas
+    description: Operaciones sobre cuentas bancarias ficticias.
+
 paths:
   /clientes/{cliente-id}/cuentas:
     get:
       tags: [Cuentas]
       summary: Consultar cuentas de un cliente
+      description: Devuelve las cuentas bancarias ficticias asociadas al identificador del cliente.
       operationId: listarCuentasCliente
       parameters:
         - name: cliente-id
@@ -46,37 +53,11 @@ paths:
             responseTemplates:
               application/json: |
                 {"origen":"MOCK","clienteId":"$util.escapeJavaScript($input.params('cliente-id'))","cuentas":[{"numeroCuenta":"1000000001","tipo":"AHORROS","moneda":"PEN","titular":"Cliente de prueba","saldo":100.0}]}
-components:
-  schemas:
-    Cuenta:
-      type: object
-      required: [numeroCuenta, tipo, moneda, titular, saldo]
-      properties:
-        numeroCuenta: {type: string, example: '1000000001'}
-        tipo: {type: string, enum: [AHORROS, CORRIENTE]}
-        moneda: {type: string, enum: [PEN, USD]}
-        titular: {type: string, example: 'Cliente de prueba'}
-        saldo: {type: number, minimum: 0, example: 100}
-    ConsultaCuentas:
-      type: object
-      required: [origen, clienteId, cuentas]
-      properties:
-        origen: {type: string, enum: [MOCK, LAMBDA]}
-        clienteId: {type: string}
-        cuentas:
-          type: array
-          items: {$ref: '#/components/schemas/Cuenta'}
-    Problema:
-      type: object
-      required: [title, status, detail]
-      properties:
-        title: {type: string}
-        status: {type: integer}
-        detail: {type: string}
 
     post:
       tags: [Cuentas]
       summary: Crear una cuenta simulada
+      description: Simula la creación de una cuenta para el cliente sin persistir datos.
       operationId: crearCuentaCliente
       parameters:
         - name: cliente-id
@@ -122,3 +103,31 @@ components:
             responseTemplates:
               application/json: |
                 {"numeroCuenta":"SIMULADO-0001","tipo":"AHORROS","moneda":"PEN","titular":"Cliente (Mock)","saldo":0}
+
+components:
+  schemas:
+    Cuenta:
+      type: object
+      required: [numeroCuenta, tipo, moneda, titular, saldo]
+      properties:
+        numeroCuenta: {type: string, example: '1000000001'}
+        tipo: {type: string, enum: [AHORROS, CORRIENTE]}
+        moneda: {type: string, enum: [PEN, USD]}
+        titular: {type: string, example: 'Cliente de prueba'}
+        saldo: {type: number, minimum: 0, example: 100}
+    ConsultaCuentas:
+      type: object
+      required: [origen, clienteId, cuentas]
+      properties:
+        origen: {type: string, enum: [MOCK, LAMBDA]}
+        clienteId: {type: string}
+        cuentas:
+          type: array
+          items: {$ref: '#/components/schemas/Cuenta'}
+    Problema:
+      type: object
+      required: [title, status, detail]
+      properties:
+        title: {type: string}
+        status: {type: integer}
+        detail: {type: string}
