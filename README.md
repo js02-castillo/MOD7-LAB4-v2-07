@@ -144,7 +144,7 @@ Solo después de terminar el propuesto y con aprobación del instructor:
 - [ ] TEST continúa funcionando sin API Key
 - [ ] Catálogo refleja endpoints, estado y versiones
 - [ ] POST propuesto: 201 y 400
-- [ ] Limpieza concluida sin afectar compañeros
+- [ ] Limpieza concluida sin afectar compañeross
 
 ## 11. Documentación
 
